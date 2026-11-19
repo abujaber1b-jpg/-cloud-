@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملف الدم | لعبة القضايا الجنائية والمحاججة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #09090b;
+      --bg-card: #121216;
+      --bg-panel: #18181f;
+      --crimson: #dc2626;
+      --crimson-dark: #991b1b;
+      --crimson-glow: rgba(220, 38, 38, 0.25);
+      --gold: #eab308;
+      --emerald: #10b981;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --border: #27272a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(153, 27, 27, 0.16), transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(220, 38, 38, 0.12), transparent 40%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+
+    header {
+      background: rgba(12, 12, 15, 0.92);
+      border-bottom: 1px solid rgba(220, 38, 38, 0.35);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background: var(--crimson);
+      color: #fff;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 15px var(--crimson-glow);
+    }
+
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .timer-pill {
+      background: #1f1215;
+      border: 1px solid var(--crimson);
+      color: #fca5a5;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 16px var(--crimson-glow);
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 28px auto;
+      padding: 0 18px 60px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+
+    .card-crimson {
+      border-color: rgba(220, 38, 38, 0.45);
+      box-shadow: 0 10px 35px rgba(153, 27, 27, 0.18);
+    }
+
+    h2 {
+      font-size: 21px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fca5a5;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #d4d4d8;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      background: #0b0b0e;
+      border: 1px solid #3f3f46;
+      color: #fff;
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-size: 15px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 3px var(--crimson-glow);
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .btn {
+      background: var(--crimson);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 11px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: #b91c1c;
+      box-shadow: 0 6px 20px var(--crimson-glow);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: #27272a;
+      color: #e4e4e7;
+    }
+
+    .btn-secondary:hover {
+      background: #3f3f46;
+      box-shadow: none;
+    }
+
+    .btn-emerald {
+      background: #059669;
+    }
+
+    .btn-emerald:hover {
+      background: #047857;
+    }
+
+    .btn-gold {
+      background: #ca8a04;
+      color: #000;
+    }
+
+    .btn-gold:hover {
+      background: #eab308;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .badge-red { background: rgba(220, 38, 38, 0.2); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.4); }
+    .badge-green { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-gold { background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.4); }
+
+    .scene-box {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(220, 38, 38, 0.4);
+      margin-bottom: 16px;
+      background: #050304;
+    }
+
+    .scene-box img {
+      width: 100%;
+      display: block;
+      max-height: 290px;
+      object-fit: cover;
+    }
+
+    .story-box {
+      background: #0d0d11;
+      border-right: 4px solid var(--crimson);
+      padding: 18px;
+      border-radius: 8px;
+      font-size: 16px;
+      line-height: 1.85;
+      color: #f4f4f5;
+      margin-bottom: 18px;
+    }
+
+    .invite-card {
+      background: #18181f;
+      border: 1px dashed #52525b;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .code-pill {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: 900;
+      color: #fde047;
+      background: #09090b;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #3f3f46;
+      letter-spacing: 2px;
+    }
+
+    .model-answer-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 12px 0;
+    }
+
+    .auto-eval-box {
+      background: rgba(234, 179, 8, 0.08);
+      border: 1px solid rgba(234, 179, 8, 0.35);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 12px 0;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .score-item {
+      background: #0d0d11;
+      border: 1px solid #27272a;
+      border-radius: 9px;
+      padding: 12px;
+    }
+
+    .hidden { display: none !important; }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 9px;
+      margin-bottom: 16px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .alert-error {
+      background: rgba(220, 38, 38, 0.2);
+      border: 1px solid var(--crimson);
+      color: #fecaca;
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid #3b82f6;
+      color: #bfdbfe;
+    }
+
+    .winner-banner {
+      background: linear-gradient(135deg, #450a0a, #18181b, #422006);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 0 40px rgba(234, 179, 8, 0.25);
+    }
+
+    .winner-banner h2 {
+      justify-content: center;
+      font-size: 28px;
+      color: #fde047;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: right;
+      border-bottom: 1px solid #27272a;
+    }
+
+    th {
+      background: #18181f;
+      color: #fca5a5;
+      font-weight: 800;
+    }
+
+    .copy-btn {
+      font-size: 12px;
+      padding: 4px 10px;
+      background: #27272a;
+      color: #fff;
+      border: 1px solid #3f3f46;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: #3f3f46; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-badge">TOP SECRET • جنائي</span>
+    <h1>ملف الدم — مسرح الجريمة والمحاججة</h1>
+  </div>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div id="globalTimer" class="timer-pill">
+      <span>⏱️ الوقت المتبقي:</span>
+      <span id="timerDisplay">00:00</span>
+    </div>
+    <button id="resetSessionBtn" class="btn btn-secondary hidden" onclick="leaveSession()" style="padding:6px 12px; font-size:13px;">خروج من الغرفة</button>
+  </div>
+</header>
+
+<div class="container">
+  <div id="globalAlert" class="alert alert-error hidden"></div>
+
+  <!-- VIEW 1: LANDING (HOST CREATE OR PLAYER JOIN) -->
+  <div id="viewLanding">
+    <div class="card card-crimson" style="text-align:center; padding:32px 20px;">
+      <span class="badge badge-red" style="margin-bottom:10px;">30 قضية جنائية دموية • تقييم آلي + تحكيم المقدم</span>
+      <h2 style="justify-content:center; font-size:28px; margin-bottom:8px;">غرفة التحقيقات الجنائية الكبرى</h2>
+      <p style="color:var(--text-muted); max-width:680px; margin:0 auto;">
+        لعبة تحقيق جماعية مشوّقة: يدير المقدم الغرفة، يرسل الدعوات للمجموعات، يوزع قضايا القتل والغموض العشوائية، ويقود جولة الإلقاء والمحاججة لكشف التناقضات وإعلان الفريق الفائز!
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <!-- Host Create Box -->
+      <div class="card">
+        <h2>🕵️‍♂️ إنشاء غرفة جديدة (للمقدم)</h2>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">
+          تحكم كامل في عدد المجموعات، اختيار القضايا من أصل 30 قضية عشوائية، رؤية الحل النموذجي، ورصد الدرجات.
+        </p>
+        <label>اسم المقدم (المحقق الرئيسي)</label>
+        <input type="text" id="hostNameInput" placeholder="مثال: المحقق بسام" value="المقدم" />
+
+        <div class="grid-2" style="gap:12px;">
+          <div>
+            <label>عدد المجموعات (2 إلى 8)</label>
+            <input type="number" id="numGroupsInput" min="2" max="8" value="3" />
+          </div>
+          <div>
+            <label>مدة التحقيق (بالدقائق)</label>
+            <input type="number" id="timeMinutesInput" min="1" max="60" value="10" />
+          </div>
+        </div>
+
+        <button class="btn" style="width:100%;" onclick="createGame()">إنشاء الغرفة وإصدار دعوات المجموعات</button>
+      </div>
+
+      <!-- Player Join Box -->
+      <div class="card">
+        <h2>🔦 الانضمام إلى مجموعة (للاعبين)</h2>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">
+          أدخل رمز الغرفة ورمز دعوة مجموعتك المرسل من المقدم، واختر اسمك واسم مجموعتك.
+        </p>
+        <label>رمز الغرفة (Room Code)</label>
+        <input type="text" id="joinGameCode" placeholder="مثال: A7K9P2" style="text-transform:uppercase;" />
+
+        <label>رمز دعوة المجموعة (Group Invite Code)</label>
+        <input type="text" id="joinInviteCode" placeholder="مثال: X4M9Q" style="text-transform:uppercase;" />
+
+        <label>اسمك كلاعب</label>
+        <input type="text" id="joinPlayerName" placeholder="اكتب اسمك هنا..." />
+
+        <label>اسم المجموعة (يمكن لأول لاعب تسميتها أو تعديلها)</label>
+        <input type="text" id="joinGroupName" placeholder="مثال: فرقة الصقور الجنائية" />
+
+        <button class="btn btn-emerald" style="width:100%;" onclick="joinGroup()">دخول مسرح الجريمة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: HOST DASHBOARD -->
+  <div id="viewHost" class="hidden">
+    <div class="card card-crimson">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <span class="badge badge-gold">لوحة تحكم المقدم</span>
+          <h2 style="margin-top:6px; margin-bottom:2px;">غرفة التحقيق: <span id="hostRoomCode" class="code-pill"></span></h2>
+          <p style="color:var(--text-muted); font-size:14px;">المرحلة الحالية: <strong id="hostPhaseLabel" style="color:#fca5a5;"></strong></p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button id="btnAddMinute" class="btn btn-secondary hidden" onclick="addTimerSeconds(60)">+1 دقيقة للوقت</button>
+          <button id="btnStartDebate" class="btn btn-gold hidden" onclick="startDebatePhase()">⚖️ بدء فقرة الإلقاء والمحاججة</button>
+          <button id="btnAnnounceWinner" class="btn btn-emerald hidden" onclick="announceWinner()">🏆 اعتماد الدرجات وإعلان الفائز</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Host Step 1: Invites & Case Assignment (Lobby) -->
+    <div id="hostLobbySection">
+      <div class="card">
+        <h2>📩 1. دعوات المجموعات (أرسل لكل مجموعة رمزها الخاص)</h2>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">
+          شارك <strong>رمز الغرفة</strong> و<strong>رمز دعوة المجموعة</strong> أو انسخ رابط الدعوة المباشر لكل فريق:
+        </p>
+        <div id="hostInvitesGrid" class="grid-3"></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <h2>🗂️ 2. اختيار القضايا العشوائية وتحديد الخصوم (من بين 30 قضية)</h2>
+          <button class="btn btn-secondary" onclick="reshuffleCases()">🔀 إعادة خلط القضايا عشوائياً</button>
+        </div>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">
+          اختر لكل مجموعة قضية مختلفة (يظهر لك ملخص الفكرة الرئيسية لكل قضية)، وحدد المجموعة الخصم التي ستحاججها وتكشف تناقضاتها:
+        </p>
+
+        <div id="hostAssignmentRows"></div>
+
+        <div style="margin-top:16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="width:220px;">
+            <label>تأكيد وقت التحقيق (دقائق)</label>
+            <input type="number" id="hostConfirmMinutes" min="1" max="60" value="10" style="margin-bottom:0;" />
+          </div>
+          <button class="btn" style="padding:14px 28px; font-size:16px; margin-top:20px;" onclick="startInvestigation()">
+            🚨 توزيع القضايا وبدء التحقيق الآن!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Host Step 2 & 3: Active Investigation, Grading & Debate -->
+    <div id="hostActiveSection" class="hidden">
+      <div id="hostWinnerBanner" class="winner-banner hidden"></div>
+      <div id="hostGroupsGradingContainer"></div>
+    </div>
+  </div>
+
+  <!-- VIEW 3: PLAYER / GROUP SCREEN -->
+  <div id="viewPlayer" class="hidden">
+    <div class="card card-crimson">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <span class="badge badge-red">فريق التحقيق</span>
+          <h2 style="margin-top:6px; margin-bottom:2px;" id="playerGroupTitle">المجموعة</h2>
+          <p style="color:var(--text-muted); font-size:14px;">الأعضاء: <span id="playerMembersList" style="color:#fff;"></span></p>
+        </div>
+        <div style="text-align:left;">
+          <span class="badge badge-gold" id="playerPhaseBadge">بانتظار بدء المقدم</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Waiting Lobby -->
+    <div id="playerLobbyBox" class="card" style="text-align:center; padding:36px 20px;">
+      <h2>⏳ بانتظار المقدم لاختيار القضايا وبدء التحقيق...</h2>
+      <p style="color:var(--text-muted); margin-bottom:18px;">استعدوا! سيقوم المقدم بتوزيع ملف القضية الجنائية وتحديد المجموعة الخصم قريباً.</p>
+      <div id="playerLobbyStatusList" class="grid-3" style="text-align:right;"></div>
+    </div>
+
+    <!-- Player Investigation & Answer Form -->
+    <div id="playerCaseBox" class="hidden">
+      <div class="card card-crimson">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <h2 style="margin-bottom:0;" id="pCaseTitle">عنوان القضية</h2>
+          <span class="badge badge-red" id="pCaseCategory">تصنيف القضية</span>
+        </div>
+
+        <div class="scene-box">
+          <img id="pCaseImage" src="" alt="مسرح الجريمة" />
+        </div>
+
+        <h3>📋 تفاصيل مسرح الجريمة والأدلة الجنائية:</h3>
+        <div class="story-box" id="pCaseStory"></div>
+      </div>
+
+      <!-- Opponent Case Summary Box -->
+      <div class="card" style="border-color: rgba(234, 179, 8, 0.4);">
+        <h2>⚔️ ملف المجموعة الخصم (لتجهيز المحاججة وكشف ثغراتهم)</h2>
+        <p style="color:#fde047; font-weight:700; margin-bottom:8px;">
+          المجموعة التي ستحاججونها: <span id="pOpponentGroupName"></span>
+        </p>
+        <div style="background:#0d0d11; padding:14px; border-radius:9px; border-right:3px solid var(--gold); margin-bottom:10px;">
+          <strong id="pOpponentCaseTitle" style="color:#fff; display:block; margin-bottom:4px;"></strong>
+          <p id="pOpponentCaseSummary" style="color:#d4d4d8; font-size:14px; margin-bottom:8px;"></p>
+          <details>
+            <summary style="cursor:pointer; color:#fde047; font-size:13px; font-weight:700;">عرض النص الكامل لقضية الخصم لقراءة التفاصيل</summary>
+            <p id="pOpponentCaseStory" style="color:#a1a1aa; font-size:14px; margin-top:8px; line-height:1.7;"></p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Answer Submission Form -->
+      <div id="playerFormCard" class="card">
+        <h2>✍️ محضر التحقيق النهائي للمجموعة</h2>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">
+          ملاحظة: الحل النموذجي محفوظ لدى المقدم فقط. اكتبوا إجاباتكم بدقة ووضوح قبل انتهاء الوقت.
+        </p>
+
+        <label>1. من هو الجاني؟ (اكتب الاسم/الصفة باختصار ووضوح) — [10 درجات]</label>
+        <input type="text" id="ansCulprit" placeholder="مثال: المحاسب ماجد" />
+
+        <label>2. ما السبب وكيف تمت الجريمة باختصار؟ — [30 درجة]</label>
+        <textarea id="ansMotive" placeholder="اشرح الدافع وراء الجريمة وكيفية تنفيذها باختصار وتركيز..."></textarea>
+
+        <label>3. ما هي التناقضات والأدلة الجنائية التي كشفت الجاني؟ — [15 درجة]</label>
+        <textarea id="ansContradictions" placeholder="اذكر التناقض في أقوال المشتبه بهم أو الدليل المادي في مسرح الجريمة..."></textarea>
+
+        <label>4. ملاحظة استثنائية (استنتاج ذكي إضافي يقيمه المقدم) — [5 درجات]</label>
+        <textarea id="ansSpecialNote" placeholder="أي تفصيلة دقيقة أو ربط استثنائي لاحظته مجموعتكم..."></textarea>
+
+        <label>5. تجهيز الرد والمحاججة على المجموعة الخصم (<span id="pOpponentLabelInline"></span>) — [تُستخدم في فقرة المناقشة 20 درجة]</label>
+        <textarea id="ansOpponentRebuttal" placeholder="جهّز أسئلتك المحرجة ونقاط الهجوم وكشف التناقضات ضد المجموعة التي ستلقي قضيتها..."></textarea>
+
+        <button class="btn" style="width:100%; padding:14px; font-size:16px;" onclick="submitPlayerAnswers()">
+          📤 اعتماد وإرسال المحضر للمقدم
+        </button>
+      </div>
+
+      <!-- Submitted / Waiting State (No scores shown yet!) -->
+      <div id="playerSubmittedCard" class="card hidden" style="border-color: rgba(16, 185, 129, 0.45);">
+        <h2 style="color:#6ee7b7;">✅ تم إرسال محضر مجموعتكم للمقدم بنجاح!</h2>
+        <p style="color:var(--text-muted); margin-bottom:14px;">
+          النقاط محجوبة حالياً عن جميع المجموعات حتى انتهاء فقرة الإلقاء والمحاججة ورصد المقدم لكافة الدرجات.
+        </p>
+        <div class="story-box" style="border-right-color: var(--emerald);">
+          <p><strong>الجاني:</strong> <span id="subViewCulprit"></span></p>
+          <p style="margin-top:8px;"><strong>السبب وكيف تمت:</strong> <span id="subViewMotive"></span></p>
+          <p style="margin-top:8px;"><strong>التناقضات المكتشفة:</strong> <span id="subViewContradictions"></span></p>
+          <p style="margin-top:8px;"><strong>الملاحظة الاستثنائية:</strong> <span id="subViewSpecial"></span></p>
+          <hr style="border-color:#27272a; margin:12px 0;">
+          <p style="color:#fde047;"><strong>ورقة المحاججة الجاهزة ضد الخصم (للاستخدام أثناء الإلقاء):</strong></p>
+          <p id="subViewRebuttal" style="color:#fef08a; margin-top:4px;"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Final Results View -->
+    <div id="playerResultsBox" class="hidden">
+      <div id="playerWinnerBanner" class="winner-banner"></div>
+      <div class="card card-crimson">
+        <h2>📊 بطاقة درجات مجموعتكم التفصيلية (من 100 درجة)</h2>
+        <p style="color:var(--text-muted); margin-bottom:14px;">فيما يلي تقييم المقدم لكل فقرة مع سبب منح الدرجة:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>البند</th>
+              <th>الدرجة</th>
+              <th>سبب التقييم وملاحظة المقدم</th>
+            </tr>
+          </thead>
+          <tbody id="playerScoreTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let session = {
+    role: null, // 'host' or 'player'
+    game_code: null,
+    host_token: null,
+    group_index: null,
+    player_name: null
+  };
+
+  let pollInterval = null;
+  let timerInterval = null;
+  let currentTimerEnd = null;
+  let serverTimeOffset = 0;
+  let cachedCases = [];
+  let cachedHostGroups = [];
+
+  // Check URL query params for direct invite link (?room=XXX&invite=YYY)
+  window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const roomParam = params.get("room");
+    const inviteParam = params.get("invite");
+    if (roomParam) document.getElementById("joinGameCode").value = roomParam.toUpperCase();
+    if (inviteParam) document.getElementById("joinInviteCode").value = inviteParam.toUpperCase();
+
+    const saved = localStorage.getItem("crimson_detective_session");
+    if (saved) {
+      try {
+        session = JSON.parse(saved);
+        if (session && session.role && session.game_code) {
+          enterSessionUI();
+        }
+      } catch (e) {}
+    }
+  });
+
+  function showAlert(msg, isInfo = false) {
+    const el = document.getElementById("globalAlert");
+    el.textContent = msg;
+    el.className = isInfo ? "alert alert-info" : "alert alert-error";
+    el.classList.remove("hidden");
+    setTimeout(() => el.classList.add("hidden"), 5000);
+  }
+
+  function saveSession() {
+    localStorage.setItem("crimson_detective_session", JSON.stringify(session));
+  }
+
+  function leaveSession() {
+    localStorage.removeItem("crimson_detective_session");
+    if (pollInterval) clearInterval(pollInterval);
+    if (timerInterval) clearInterval(timerInterval);
+    location.href = "/";
+  }
+
+  async function createGame() {
+    const host_name = document.getElementById("hostNameInput").value.trim() || "المقدم";
+    const num_groups = parseInt(document.getElementById("numGroupsInput").value) || 3;
+    const time_minutes = parseInt(document.getElementById("timeMinutesInput").value) || 10;
+
+    const res = await fetch("/api/create_game", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ host_name, num_groups, time_minutes })
+    });
+    const data = await res.json();
+    if (!data.ok) return showAlert(data.error || "حدث خطأ");
+
+    session = {
+      role: "host",
+      game_code: data.game_code,
+      host_token: data.host_token
+    };
+    saveSession();
+    enterSessionUI();
+  }
+
+  async function joinGroup() {
+    const game_code = document.getElementById("joinGameCode").value.trim().toUpperCase();
+    const invite_code = document.getElementById("joinInviteCode").value.trim().toUpperCase();
+    const player_name = document.getElementById("joinPlayerName").value.trim();
+    const group_name = document.getElementById("joinGroupName").value.trim();
+
+    if (!game_code || !invite_code || !player_name) {
+      return showAlert("يرجى إدخال رمز الغرفة ورمز دعوة المجموعة واسمك.");
+    }
+
+    const res = await fetch("/api/join_group", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game_code, invite_code, player_name, group_name })
+    });
+    const data = await res.json();
+    if (!data.ok) return showAlert(data.error || "تعذر الانضمام");
+
+    session = {
+      role: "player",
+      game_code: data.game_code,
+      group_index: data.group_index,
+      player_name: data.player_name
+    };
+    saveSession();
+    enterSessionUI();
+  }
+
+  function enterSessionUI() {
+    document.getElementById("viewLanding").classList.add("hidden");
+    document.getElementById("resetSessionBtn").classList.remove("hidden");
+
+    if (session.role === "host") {
+      document.getElementById("viewHost").classList.remove("hidden");
+      fetchHostState();
+      pollInterval = setInterval(fetchHostState, 3000);
+    } else {
+      document.getElementById("viewPlayer").classList.remove("hidden");
+      fetchPlayerState();
+      pollInterval = setInterval(fetchPlayerState, 2500);
+    }
+
+    timerInterval = setInterval(updateClockUI, 1000);
+  }
+
+  function updateClockUI() {
+    const pill = document.getElementById("globalTimer");
+    const disp = document.getElementById("timerDisplay");
+    if (!currentTimerEnd) {
+      pill.style.display = "none";
+      return;
+    }
+    pill.style.display = "flex";
+    const nowServer = (Date.now() / 1000) + serverTimeOffset;
+    const diff = Math.max(0, Math.floor(currentTimerEnd - nowServer));
+    const mins = String(Math.floor(diff / 60)).padStart(2, "0");
+    const secs = String(diff % 60).padStart(2, "0");
+    disp.textContent = `${mins}:${secs}`;
+    if (diff === 0) {
+      disp.textContent = "انتهى الوقت!";
+    }
+  }
+
+  // ================= HOST LOGIC =================
+  async function fetchHostState() {
+    const res = await fetch(`/api/host/state?game_code=${session.game_code}&host_token=${session.host_token}`);
+    const data = await res.json();
+    if (!data.ok) return;
+
+    const game = data.game;
+    cachedCases = data.cases;
+    cachedHostGroups = game.groups;
+    serverTimeOffset = game.server_now - (Date.now() / 1000);
+    currentTimerEnd = game.timer_end;
+
+    document.getElementById("hostRoomCode").textContent = game.game_code;
+    const phaseMap = {
+      lobby: "تجهيز المجموعات واختيار القضايا",
+      investigating: "جاري التحقيق وحل القضايا",
+      debate: "فقرة الإلقاء والمحاججة المباشرة",
+      results: "النتائج النهائية وإعلان الفائز"
+    };
+    document.getElementById("hostPhaseLabel").textContent = phaseMap[game.phase] || game.phase;
+
+    if (game.phase === "lobby") {
+      document.getElementById("hostLobbySection").classList.remove("hidden");
+      document.getElementById("hostActiveSection").classList.add("hidden");
+      renderHostLobby(game);
+    } else {
+      document.getElementById("hostLobbySection").classList.add("hidden");
+      document.getElementById("hostActiveSection").classList.remove("hidden");
+
+      document.getElementById("btnAddMinute").classList.toggle("hidden", game.phase !== "investigating");
+      document.getElementById("btnStartDebate").classList.toggle("hidden", game.phase !== "investigating");
+      document.getElementById("btnAnnounceWinner").classList.toggle("hidden", game.phase === "results");
+
+      renderHostActiveGroups(game);
+    }
+  }
+
+  function renderHostLobby(game) {
+    const invitesGrid = document.getElementById("hostInvitesGrid");
+    invitesGrid.innerHTML = game.groups.map(g => {
+      const inviteUrl = `${location.origin}/?room=${game.game_code}&invite=${g.invite_code}`;
+      return `
+        <div class="invite-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="color:#fff;">${g.name}</strong>
+            <span class="badge ${g.joined ? 'badge-green' : 'badge-red'}">${g.joined ? 'متصلة (' + g.players.length + ')' : 'بانتظار الدخول'}</span>
+          </div>
+          <div style="margin-bottom:8px;">
+            <span style="font-size:13px; color:#a1a1aa;">رمز الدعوة: </span>
+            <span class="code-pill">${g.invite_code}</span>
+          </div>
+          <div style="font-size:13px; color:#d4d4d8; margin-bottom:10px;">
+            اللاعبون: ${g.players.length ? g.players.join("، ") : "لا يوجد بعد"}
+          </div>
+          <button class="copy-btn" onclick="copyText('${inviteUrl}')">📋 نسخ رابط الدعوة المباشر</button>
+        </div>
+      `;
+    }).join("");
+
+    const assignContainer = document.getElementById("hostAssignmentRows");
+    // Only build dropdowns once or preserve selection
+    if (assignContainer.dataset.built === "1" && assignContainer.dataset.caseOrder === cachedCases.map(c=>c.id).join(",")) {
+      // Just update group names in labels
+      game.groups.forEach(g => {
+        const lbl = document.getElementById(`assignGroupTitle_${g.index}`);
+        if (lbl) lbl.textContent = `${g.name} (${g.players.length} لاعبين)`;
+      });
+      return;
+    }
+
+    assignContainer.dataset.built = "1";
+    assignContainer.dataset.caseOrder = cachedCases.map(c=>c.id).join(",");
+
+    assignContainer.innerHTML = game.groups.map((g, idx) => {
+      const defaultCase = cachedCases[idx % cachedCases.length];
+      const defaultOpp = (idx + 1) % game.num_groups;
+
+      const caseOptions = cachedCases.map((c, cIdx) => `
+        <option value="${c.id}" ${cIdx === idx ? "selected" : ""}>
+          قضية #${c.id}: ${c.title} — (${c.summary_for_host})
+        </option>
+      `).join("");
+
+      const oppOptions = game.groups.map(og => {
+        if (og.index === g.index) return "";
+        return `<option value="${og.index}" ${og.index === defaultOpp ? "selected" : ""}>تحاجج: ${og.name}</option>`;
+      }).join("");
+
+      return `
+        <div class="card" style="background:#18181f; padding:16px; margin-bottom:12px;">
+          <h3 id="assignGroupTitle_${g.index}" style="color:#fde047;">${g.name} (${g.players.length} لاعبين)</h3>
+          <div class="grid-2">
+            <div>
+              <label>اختر القضية لهذه المجموعة (فكرة مختصرة):</label>
+              <select id="selectCase_${g.index}">${caseOptions}</select>
+            </div>
+            <div>
+              <label>حدد المجموعة الخصم التي ستحاججها:</label>
+              <select id="selectOpp_${g.index}">${oppOptions}</select>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function copyText(txt) {
+    navigator.clipboard.writeText(txt);
+    showAlert("تم نسخ رابط الدعوة! أرسله للاعبي المجموعة.", true);
+  }
+
+  async function reshuffleCases() {
+    await fetch("/api/host/reshuffle_cases", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game_code: session.game_code, host_token: session.host_token })
+    });
+    document.getElementById("hostAssignmentRows").dataset.built = "0";
+    fetchHostState();
+    showAlert("تم خلط القضايا الـ 30 عشوائياً!", true);
+  }
+
+  async function startInvestigation() {
+    const assignments = cachedHostGroups.map(g => ({
+      group_index: g.index,
+      case_id: parseInt(document.getElementById(`selectCase_${g.index}`).value),
+      opponent_group_index: parseInt(document.getElementById(`selectOpp_${g.index}`).value)
+    }));
+    const time_minutes = parseInt(document.getElementById("hostConfirmMinutes").value) || 10;
+
+    const res = await fetch("/api/host/setup_and_start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        game_code: session.game_code,
+        host_token: session.host_token,
+        assignments,
+        time_minutes
+      })
+    });
+    const data = await res.json();
+    if (!data.ok) return showAlert(data.error || "خطأ في التوزيع");
+    fetchHostState();
+  }
+
+  async function addTimerSeconds(sec) {
+    await fetch("/api/host/update_timer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game_code: session.game_code, host_token: session.host_token, extra_seconds: sec })
+    });
+    fetchHostState();
+  }
+
+  async function startDebatePhase() {
+    await fetch("/api/host/start_debate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game_code: session.game_code, host_token: session.host_token })
+    });
+    fetchHostState();
+  }
+
+  async function announceWinner() {
+    await fetch("/api/host/announce_winner", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game_code: session.game_code, host_token: session.host_token })
+    });
+    fetchHostState();
+  }
+
+  function renderHostActiveGroups(game) {
+    const winnerBanner = document.getElementById("hostWinnerBanner");
+    if (game.phase === "results" && game.winner_group_index !== null) {
+      const winG = game.groups[game.winner_group_index];
+      winnerBanner.classList.remove("hidden");
+      winnerBanner.innerHTML = `
+        <span class="badge badge-gold">النتيجة النهائية المعتمدة</span>
+        <h2 style="margin-top:8px;">🏆 الفائز بالمركز الأول: ${winG.name} (${winG.total_score} / 100 درجة)</h2>
+        <p style="color:#e4e4e7;">تم إرسال الدرجات التفصيلية مع أسباب كل نقطة إلى شاشة كل مجموعة.</p>
+      `;
+    } else {
+      winnerBanner.classList.add("hidden");
+    }
+
+    const container = document.getElementById("hostGroupsGradingContainer");
+    // Avoid overwriting inputs while host is actively typing
+    const activeEl = document.activeElement;
+    if (activeEl && container.contains(activeEl) && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA")) {
+      return;
+    }
+
+    container.innerHTML = game.groups.map(g => {
+      const c = g.assigned_case || {};
+      const auto = g.auto_eval;
+      const s = g.scores;
+      const r = g.score_reasons;
+
+      const defaultC = g.graded_phase1 ? s.culprit : (auto ? auto.culprit : 0);
+      const defaultM = g.graded_phase1 ? s.motive : (auto ? auto.motive : 0);
+      const defaultX = g.graded_phase1 ? s.contradictions : (auto ? auto.contradictions : 0);
+      const defaultS = g.graded_phase1 ? s.special_note : 0;
+
+      return `
+        <div class="card ${g.submitted ? 'card-crimson' : ''}">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+            <div>
+              <h2 style="margin-bottom:2px;">${g.name} — <span style="color:#fca5a5;">${c.title || ''}</span></h2>
+              <p style="font-size:13px; color:#a1a1aa;">
+                الأعضاء: ${g.players.join("، ") || "لا يوجد"} | تحاجج: <strong style="color:#fde047;">${g.opponent_group_name || ''}</strong>
+              </p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span class="badge ${g.submitted ? 'badge-green' : 'badge-red'}">
+                ${g.submitted ? '✅ أنهت العمل وأرسلت الإجابات' : '⏳ قيد التحقيق...'}
+              </span>
+              <span class="badge badge-gold">المجموع الحالي: ${g.total_score} / 100</span>
+            </div>
+          </div>
+
+          <!-- Model Answer (Exclusive to Host!) -->
+          <div class="model-answer-box">
+            <strong style="color:#6ee7b7; display:block; margin-bottom:6px;">🔐 الحل النموذجي السري (يظهر للمقدم فقط):</strong>
+            <p style="font-size:14px;"><strong>الجاني:</strong> ${c.culprit || ''}</p>
+            <p style="font-size:14px; margin-top:4px;"><strong>السبب وكيف تمت الجريمة:</strong> ${c.motive_and_how || ''}</p>
+            <p style="font-size:14px; margin-top:4px;"><strong>التناقض الجوهري:</strong> ${c.contradictions_hint || ''}</p>
+          </div>
+
+          ${g.submitted ? `
+            <!-- Auto Evaluation Summary -->
+            ${auto ? `
+              <div class="auto-eval-box">
+                <strong style="color:#fde047; display:block; margin-bottom:4px;">🤖 نتيجة المقارنة والتقييم الآلي المبدئي (${auto.total_auto} / 55):</strong>
+                <p style="font-size:13px; color:#fef08a;">
+                  الجاني المقترح: <strong>${auto.culprit}/10</strong> | السبب المقترح: <strong>${auto.motive}/30</strong> | التناقضات المقترحة: <strong>${auto.contradictions}/15</strong>
+                </p>
+                <p style="font-size:12px; color:#d4d4d8; margin-top:4px;">${auto.notes}</p>
+              </div>
+            ` : ''}
+
+            <!-- Group's Submitted Answers -->
+            <div class="story-box" style="margin-top:12px;">
+              <p><strong>إجابة المجموعة — من هو الجاني:</strong> ${g.answers.culprit}</p>
+              <p style="margin-top:8px;"><strong>إجابة المجموعة — السبب وكيف تمت:</strong> ${g.answers.motive}</p>
+              <p style="margin-top:8px;"><strong>إجابة المجموعة — التناقضات المكتشفة:</strong> ${g.answers.contradictions || 'لم يُكتب'}</p>
+              <p style="margin-top:8px;"><strong>إجابة المجموعة — ملاحظة استثنائية:</strong> ${g.answers.special_note || 'لم يُكتب'}</p>
+              <hr style="border-color:#27272a; margin:10px 0;">
+              <p style="color:#fde047;"><strong>تجهيز المجموعة للمحاججة ضد (${g.opponent_group_name}):</strong> ${g.answers.opponent_rebuttal || 'لم يُكتب'}</p>
+            </div>
+
+            <!-- Phase 1 Grading Form (60 points) -->
+            <h3 style="margin-top:14px;">📝 رصد درجات التحقيق (60 درجة) مع كتابة سبب كل درجة:</h3>
+            <div class="score-grid">
+              <div class="score-item">
+                <label>من هو الجاني (من 10)</label>
+                <input type="number" id="sc_c_${g.index}" min="0" max="10" value="${defaultC}" />
+                <input type="text" id="rs_c_${g.index}" placeholder="سبب الدرجة..." value="${r.culprit || ''}" style="margin-bottom:0; font-size:13px;" />
+              </div>
+              <div class="score-item">
+                <label>السبب ولماذا صار الجاني (من 30)</label>
+                <input type="number" id="sc_m_${g.index}" min="0" max="30" value="${defaultM}" />
+                <input type="text" id="rs_m_${g.index}" placeholder="سبب الدرجة..." value="${r.motive || ''}" style="margin-bottom:0; font-size:13px;" />
+              </div>
+              <div class="score-item">
+                <label>اكتشاف التناقضات (من 15)</label>
+                <input type="number" id="sc_x_${g.index}" min="0" max="15" value="${defaultX}" />
+                <input type="text" id="rs_x_${g.index}" placeholder="سبب الدرجة..." value="${r.contradictions || ''}" style="margin-bottom:0; font-size:13px;" />
+              </div>
+              <div class="score-item">
+                <label>ملاحظة استثنائية (من 5)</label>
+                <input type="number" id="sc_s_${g.index}" min="0" max="5" value="${defaultS}" />
+                <input type="text" id="rs_s_${g.index}" placeholder="سبب الدرجة..." value="${r.special_note || ''}" style="margin-bottom:0; font-size:13px;" />
+              </div>
+            </div>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="savePhase1Grade(${g.index})">
+              💾 حفظ درجات التحقيق (${g.graded_phase1 ? 'تم الحفظ ✓' : 'غير محفوظ'})
+            </button>
+
+            <!-- Phase 2 Grading Form (40 points: Presentation & Debate) -->
+            <h3 style="margin-top:18px; color:#fde047;">🎙️ رصد درجات فقرة المناقشة: الإلقاء والمحاججة (40 درجة):</h3>
+            <div class="grid-2">
+              <div class="score-item">
+                <label>درجة الإلقاء وعرض القضية (من 20)</label>
+                <input type="number" id="sc_p_${g.index}" min="0" max="20" value="${s.presentation}" />
+                <input type="text" id="rs_p_${g.index}" placeholder="سبب درجة الإلقاء..." value="${r.presentation || ''}" style="margin-bottom:0; font-size:13px;" />
+              </div>
+              <div class="score-item">
+                <label>درجة المحاججة وكشف ثغرات الخصم (من 20)</label>
+                <input type="number" id="sc_d_${g.index}" min="0" max="20" value="${s.debate}" />
+                <input type="text" id="rs_d_${g.index}" placeholder="سبب درجة المحاججة..." value="${r.debate || ''}" style="margin-bottom:0; font-size:13px;" />
+              </div>
+            </div>
+            <button class="btn btn-gold" style="margin-top:10px;" onclick="savePhase2Grade(${g.index})">
+              💾 حفظ درجات الإلقاء والمحاججة (${g.graded_phase2 ? 'تم الحفظ ✓' : 'غير محفوظ'})
+            </button>
+          ` : `
+            <p style="color:#a1a1aa; font-size:14px; margin-top:10px;">بانتظار انتهاء المجموعة من كتابة إجاباتها وإرسالها...</p>
+          `}
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function savePhase1Grade(gIdx) {
+    const payload = {
+      game_code: session.game_code,
+      host_token: session.host_token,
+      group_index: gIdx,
+      culprit: parseInt(document.getElementById(`sc_c_${gIdx}`).value) || 0,
+      motive: parseInt(document.getElementById(`sc_m_${gIdx}`).value) || 0,
+      contradictions: parseInt(document.getElementById(`sc_x_${gIdx}`).value) || 0,
+      special_note: parseInt(document.getElementById(`sc_s_${gIdx}`).value) || 0,
+      reason_culprit: document.getElementById(`rs_c_${gIdx}`).value,
+      reason_motive: document.getElementById(`rs_m_${gIdx}`).value,
+      reason_contradictions: document.getElementById(`rs_x_${gIdx}`).value,
+      reason_special_note: document.getElementById(`rs_s_${gIdx}`).value
+    };
+    const res = await fetch("/api/host/grade_phase1", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showAlert("تم حفظ درجات التحقيق بنجاح!", true);
+      fetchHostState();
+    }
+  }
+
+  async function savePhase2Grade(gIdx) {
+    const payload = {
+      game_code: session.game_code,
+      host_token: session.host_token,
+      group_index: gIdx,
+      presentation: parseInt(document.getElementById(`sc_p_${gIdx}`).value) || 0,
+      debate: parseInt(document.getElementById(`sc_d_${gIdx}`).value) || 0,
+      reason_presentation: document.getElementById(`rs_p_${gIdx}`).value,
+      reason_debate: document.getElementById(`rs_d_${gIdx}`).value
+    };
+    const res = await fetch("/api/host/grade_phase2", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showAlert("تم حفظ درجات الإلقاء والمحاججة بنجاح!", true);
+      fetchHostState();
+    }
+  }
+
+  // ================= PLAYER LOGIC =================
+  async function fetchPlayerState() {
+    const res = await fetch(`/api/player/state?game_code=${session.game_code}&group_index=${session.group_index}`);
+    const data = await res.json();
+    if (!data.ok) return;
+
+    serverTimeOffset = data.server_now - (Date.now() / 1000);
+    currentTimerEnd = data.timer_end;
+
+    document.getElementById("playerGroupTitle").textContent = data.group.name;
+    document.getElementById("playerMembersList").textContent = data.group.players.join("، ");
+
+    const phaseBadges = {
+      lobby: "في غرفة الانتظار",
+      investigating: "مرحلة التحقيق وحل القضية",
+      debate: "فقرة الإلقاء والمحاججة",
+      results: "النتائج النهائية"
+    };
+    document.getElementById("playerPhaseBadge").textContent = phaseBadges[data.phase] || data.phase;
+
+    if (data.phase === "lobby") {
+      document.getElementById("playerLobbyBox").classList.remove("hidden");
+      document.getElementById("playerCaseBox").classList.add("hidden");
+      document.getElementById("playerResultsBox").classList.add("hidden");
+
+      document.getElementById("playerLobbyStatusList").innerHTML = data.all_groups_status.map(st => `
+        <div class="invite-card">
+          <strong>${st.name}</strong>
+          <p style="font-size:13px; color:#a1a1aa; margin-top:4px;">
+            ${st.players.length ? st.players.join("، ") : "بانتظار انضمام اللاعبين"}
+          </p>
+        </div>
+      `).join("");
+      return;
+    }
+
+    // Investigation or Debate
+    document.getElementById("playerLobbyBox").classList.add("hidden");
+    document.getElementById("playerCaseBox").classList.remove("hidden");
+
+    if (data.my_case) {
+      document.getElementById("pCaseTitle").textContent = `قضية #${data.my_case.id}: ${data.my_case.title}`;
+      document.getElementById("pCaseCategory").textContent = data.my_case.category;
+      document.getElementById("pCaseImage").src = `/scene/${data.my_case.id}.svg`;
+      document.getElementById("pCaseStory").textContent = data.my_case.story;
+    }
+
+    if (data.opponent) {
+      document.getElementById("pOpponentGroupName").textContent = data.opponent.group_name;
+      document.getElementById("pOpponentLabelInline").textContent = data.opponent.group_name;
+      document.getElementById("pOpponentCaseTitle").textContent = `قضية الخصم: ${data.opponent.case_title}`;
+      document.getElementById("pOpponentCaseSummary").textContent = data.opponent.case_summary;
+      document.getElementById("pOpponentCaseStory").textContent = data.opponent.case_story;
+    }
+
+    if (data.group.submitted || data.phase === "debate" || data.phase === "results") {
+      document.getElementById("playerFormCard").classList.add("hidden");
+      document.getElementById("playerSubmittedCard").classList.remove("hidden");
+      document.getElementById("subViewCulprit").textContent = data.group.answers.culprit || "—";
+      document.getElementById("subViewMotive").textContent = data.group.answers.motive || "—";
+      document.getElementById("subViewContradictions").textContent = data.group.answers.contradictions || "—";
+      document.getElementById("subViewSpecial").textContent = data.group.answers.special_note || "—";
+      document.getElementById("subViewRebuttal").textContent = data.group.answers.opponent_rebuttal || "—";
+    } else {
+      document.getElementById("playerFormCard").classList.remove("hidden");
+      document.getElementById("playerSubmittedCard").classList.add("hidden");
+    }
+
+    if (data.phase === "results" && data.final_result) {
+      document.getElementById("playerResultsBox").classList.remove("hidden");
+      const fr = data.final_result;
+      const winBanner = document.getElementById("playerWinnerBanner");
+      winBanner.innerHTML = fr.is_winner
+        ? `<span class="badge badge-gold">مبروك الفوز!</span><h2 style="margin-top:8px;">🏆 مجموعتكم (${data.group.name}) هي الفائزة بالمركز الأول!</h2><p>المجموع الكلي: ${fr.total} / 100 درجة</p>`
+        : `<span class="badge badge-red">انتهت المنافسة</span><h2 style="margin-top:8px;">🏆 الفريق الفائز بالمركز الأول: ${fr.winner_name}</h2><p>مجموع نقاط فريقكم: ${fr.total} / 100 درجة</p>`;
+
+      const rows = [
+        { label: "من هو الجاني", score: `${fr.scores.culprit} / 10`, reason: fr.reasons.culprit || "تم التقييم من المقدم" },
+        { label: "السبب ولماذا صار الجاني", score: `${fr.scores.motive} / 30`, reason: fr.reasons.motive || "تم التقييم من المقدم" },
+        { label: "اكتشاف التناقضات", score: `${fr.scores.contradictions} / 15`, reason: fr.reasons.contradictions || "تم التقييم من المقدم" },
+        { label: "ملاحظة استثنائية", score: `${fr.scores.special_note} / 5`, reason: fr.reasons.special_note || "تم التقييم من المقدم" },
+        { label: "الإلقاء وعرض القضية", score: `${fr.scores.presentation} / 20`, reason: fr.reasons.presentation || "تم التقييم من المقدم" },
+        { label: "المحاججة وكشف الثغرات", score: `${fr.scores.debate} / 20`, reason: fr.reasons.debate || "تم التقييم من المقدم" },
+        { label: "المجموع النهائي", score: `${fr.total} / 100`, reason: "الدرجة النهائية المعتمدة" }
+      ];
+
+      document.getElementById("playerScoreTableBody").innerHTML = rows.map(r => `
+        <tr>
+          <td><strong>${r.label}</strong></td>
+          <td><span class="badge badge-gold">${r.score}</span></td>
+          <td style="color:#d4d4d8;">${r.reason}</td>
+        </tr>
+      `).join("");
+    } else {
+      document.getElementById("playerResultsBox").classList.add("hidden");
+    }
+  }
+
+  async function submitPlayerAnswers() {
+    const payload = {
+      game_code: session.game_code,
+      group_index: session.group_index,
+      culprit: document.getElementById("ansCulprit").value,
+      motive: document.getElementById("ansMotive").value,
+      contradictions: document.getElementById("ansContradictions").value,
+      special_note: document.getElementById("ansSpecialNote").value,
+      opponent_rebuttal: document.getElementById("ansOpponentRebuttal").value
+    };
+
+    const res = await fetch("/api/player/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data.ok) return showAlert(data.error || "تعذر الإرسال");
+
+    showAlert("تم إرسال إجاباتكم للمقدم بنجاح!", true);
+    fetchPlayerState();
+  }
+</script>
+</body>
+</html>
